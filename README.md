@@ -15,7 +15,7 @@ train/          # stored for review, never executed
 
 `agent.yaml` names the entry class (`module:Class`), the action horizon, the action dimension, and the weight hashes. The brain image may set `NEPHER_BRAIN_CHECK=module:function` to add a model check. That function returns an error string, or `None` when the submission is acceptable.
 
-One image is built per model family. See `images/gr00t-n17` for the GR00T N1.7 image. Validators pull that image by digest and mount the submission read-only at `/submission`. They do not build an image per submission.
+One image is built per model family, in the `nepher-brain-images` repository. Validators pull that image by digest and mount the submission read-only at `/submission`. They do not build an image per submission.
 
 ```
 nepher-brain serve --submission ./examples/zero_brain --socket-dir /tmp/brain --replicas 1
