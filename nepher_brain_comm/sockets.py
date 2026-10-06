@@ -49,7 +49,7 @@ def connect(path: Path, timeout: float) -> socket.socket:
     if os.name == "nt" or not hasattr(socket, "AF_UNIX"):
         raise FileNotFoundError(
             f"brain address file {path} is missing or is not a tcp:// address. "
-            "Start nepher-brain serve with the same --socket-dir before evaluation."
+            "Start nepher-brain-comm serve with the same --socket-dir before evaluation."
         )
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.settimeout(timeout)

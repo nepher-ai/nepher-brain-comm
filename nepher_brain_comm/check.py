@@ -12,7 +12,7 @@ import importlib
 import os
 from pathlib import Path
 
-from nepher_brain.yaml_min import load_yaml
+from nepher_brain_comm.yaml_min import load_yaml
 
 REQUIRED_DIRS = ("brain", "weights", "train")
 _SHA256_HEX = 64
@@ -143,12 +143,12 @@ def _check_size(submission: Path, max_gb: float | None, errors: list[str]) -> No
 
 
 def _run_hook(submission: Path, config: dict) -> str | None:
-    spec = os.environ.get("NEPHER_BRAIN_CHECK", "").strip()
+    spec = os.environ.get("NEPHER_BRAIN_COMM_CHECK", "").strip()
     if not spec:
         return None
     module_name, sep, func_name = spec.partition(":")
     if not sep or not module_name or not func_name:
-        return "NEPHER_BRAIN_CHECK must be 'module:function'"
+        return "NEPHER_BRAIN_COMM_CHECK must be 'module:function'"
     try:
         module = importlib.import_module(module_name)
         func = getattr(module, func_name)

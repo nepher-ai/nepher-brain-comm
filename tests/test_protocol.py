@@ -5,8 +5,8 @@
 
 import numpy as np
 
-from nepher_brain.protocol import decode_message, encode_message
-from nepher_brain.yaml_min import load_yaml
+from nepher_brain_comm.protocol import decode_message, encode_message
+from nepher_brain_comm.yaml_min import load_yaml
 
 
 def test_ndarray_roundtrip():

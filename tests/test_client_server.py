@@ -12,9 +12,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from nepher_brain.client import BrainClient, BrainTimeout
-from nepher_brain.serve import run_replica
-from nepher_brain.smoke import smoke
+from nepher_brain_comm.client import BrainClient, BrainTimeout
+from nepher_brain_comm.serve import run_replica
+from nepher_brain_comm.smoke import smoke
 
 ROOT = Path(__file__).resolve().parents[1]
 ZERO = ROOT / "examples" / "zero_brain"
@@ -76,7 +76,7 @@ def _noise_submission(path: Path) -> Path:
         "noise:NoiseBrain",
         '''
 import numpy as np
-from nepher_brain.brain import Brain
+from nepher_brain_comm.brain import Brain
 
 class NoiseBrain(Brain):
     def setup(self, device, weights_dir, config):
@@ -103,7 +103,7 @@ def _slow_submission(path: Path) -> Path:
         '''
 import time
 import numpy as np
-from nepher_brain.brain import Brain
+from nepher_brain_comm.brain import Brain
 
 class SlowBrain(Brain):
     def setup(self, device, weights_dir, config):

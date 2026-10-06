@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from nepher_brain.check import CheckError, check_submission
+from nepher_brain_comm.check import CheckError, check_submission
 
 ROOT = Path(__file__).resolve().parents[1]
 ZERO = ROOT / "examples" / "zero_brain"
@@ -49,11 +49,11 @@ def test_oversize(tmp_path: Path):
 
 def test_hook_failure(tmp_path: Path, monkeypatch):
     _copy_zero(tmp_path)
-    monkeypatch.setenv("NEPHER_BRAIN_CHECK", "tests.hooks:reject")
+    monkeypatch.setenv("NEPHER_BRAIN_COMM_CHECK", "tests.hooks:reject")
     with pytest.raises(CheckError) as raised:
         check_submission(tmp_path)
     assert any("rejected by hook" in item for item in raised.value.errors)
-    monkeypatch.delenv("NEPHER_BRAIN_CHECK", raising=False)
+    monkeypatch.delenv("NEPHER_BRAIN_COMM_CHECK", raising=False)
 
 
 def _copy_zero(dest: Path) -> None:
@@ -69,5 +69,5 @@ def _set_weights(dest: Path, weights: dict[str, str]) -> None:
     (dest / "agent.yaml").write_text(text, encoding="utf-8")
 
 
-# Imported by NEPHER_BRAIN_CHECK in the hook test. Kept in this module's sibling.
+# Imported by NEPHER_BRAIN_COMM_CHECK in the hook test. Kept in this module's sibling.
 os.environ.setdefault("PYTHONDONTWRITEBYTECODE", "1")

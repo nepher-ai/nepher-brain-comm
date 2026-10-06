@@ -11,7 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nepher_brain.brain import Brain
+from nepher_brain_comm.brain import Brain
 
 
 class ZeroBrain(Brain):

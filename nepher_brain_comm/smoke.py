@@ -11,7 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nepher_brain.client import BrainClient, BrainError
+from nepher_brain_comm.client import BrainClient, BrainError
 
 
 class SmokeError(BrainError):

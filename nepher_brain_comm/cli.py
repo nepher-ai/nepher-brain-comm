@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""``nepher-brain`` console script: serve, check, and smoke."""
+"""``nepher-brain-comm`` console script: serve, check, and smoke."""
 
 from __future__ import annotations
 
@@ -12,12 +12,12 @@ import json
 import sys
 from pathlib import Path
 
-from nepher_brain.check import CheckError, check_submission
-from nepher_brain.client import BrainError
+from nepher_brain_comm.check import CheckError, check_submission
+from nepher_brain_comm.client import BrainError
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="nepher-brain")
+    parser = argparse.ArgumentParser(prog="nepher-brain-comm")
     sub = parser.add_subparsers(dest="command", required=True)
 
     serve = sub.add_parser("serve", help="serve one replica per GPU")
@@ -47,7 +47,7 @@ def main(argv: list[str] | None = None) -> None:
             forwarded += ["--submission", args.submission]
         if args.max_gb is not None:
             forwarded += ["--max-gb", str(args.max_gb)]
-        from nepher_brain.serve import main as serve_main
+        from nepher_brain_comm.serve import main as serve_main
 
         serve_main(forwarded)
         return
@@ -61,7 +61,7 @@ def main(argv: list[str] | None = None) -> None:
         json.dump({"ok": True}, sys.stdout)
         sys.stdout.write("\n")
         return
-    from nepher_brain.smoke import SmokeError, smoke
+    from nepher_brain_comm.smoke import SmokeError, smoke
 
     try:
         spec = smoke(args.socket, timeout_s=args.timeout)

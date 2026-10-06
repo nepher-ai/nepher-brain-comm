@@ -13,8 +13,8 @@ from typing import Any
 
 import numpy as np
 
-from nepher_brain.protocol import PROTOCOL_VERSION, recv_message, send_message
-from nepher_brain.sockets import connect
+from nepher_brain_comm.protocol import PROTOCOL_VERSION, recv_message, send_message
+from nepher_brain_comm.sockets import connect
 
 
 class BrainError(RuntimeError):

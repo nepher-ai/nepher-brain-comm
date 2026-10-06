@@ -5,7 +5,7 @@
 
 """Serve one brain replica per GPU.
 
-``python -m nepher_brain.serve --replicas N --socket-dir /run/brain``
+``python -m nepher_brain_comm.serve --replicas N --socket-dir /run/brain``
 """
 
 from __future__ import annotations
@@ -19,16 +19,16 @@ from pathlib import Path
 
 import numpy as np
 
-from nepher_brain.brain import Brain
-from nepher_brain.check import check_submission
-from nepher_brain.determinism import apply_determinism_flags, apply_memory_fraction, reseed
-from nepher_brain.protocol import PROTOCOL_VERSION, ProtocolError, recv_message, send_message
-from nepher_brain.sockets import bind_listener
+from nepher_brain_comm.brain import Brain
+from nepher_brain_comm.check import check_submission
+from nepher_brain_comm.determinism import apply_determinism_flags, apply_memory_fraction, reseed
+from nepher_brain_comm.protocol import PROTOCOL_VERSION, ProtocolError, recv_message, send_message
+from nepher_brain_comm.sockets import bind_listener
 
 
 def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
-    replica = os.environ.get("NEPHER_BRAIN_REPLICA")
+    replica = os.environ.get("NEPHER_BRAIN_COMM_REPLICA")
     if replica is None and args.replicas > 1:
         _spawn_replicas(args)
         return
@@ -133,7 +133,7 @@ def _spawn_replicas(args: argparse.Namespace) -> None:
     command = [
         sys.executable,
         "-m",
-        "nepher_brain.serve",
+        "nepher_brain_comm.serve",
         "--replicas",
         str(args.replicas),
         "--socket-dir",
@@ -147,7 +147,7 @@ def _spawn_replicas(args: argparse.Namespace) -> None:
         command += ["--max-gb", str(args.max_gb)]
     for index in range(args.replicas):
         env = os.environ.copy()
-        env["NEPHER_BRAIN_REPLICA"] = str(index)
+        env["NEPHER_BRAIN_COMM_REPLICA"] = str(index)
         env["CUDA_VISIBLE_DEVICES"] = str(index)
         procs.append(subprocess.Popen(command, env=env))
     code = 0
@@ -164,7 +164,7 @@ def _spawn_replicas(args: argparse.Namespace) -> None:
 
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="nepher-brain serve")
+    parser = argparse.ArgumentParser(prog="nepher-brain-comm serve")
     parser.add_argument("--entry", default=None, help="Override agent.yaml entry, as module:Class")
     parser.add_argument("--replicas", type=int, default=1)
     parser.add_argument("--socket-dir", default=os.environ.get("NEPHER_SOCKET_DIR", "/run/brain"))
