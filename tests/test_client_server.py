@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import argparse
+import os
 import textwrap
 import threading
 import time
@@ -13,11 +14,18 @@ import numpy as np
 import pytest
 
 from nepher_brain_comm.client import BrainClient, BrainTimeout
+from nepher_brain_comm.determinism import apply_determinism_flags
 from nepher_brain_comm.serve import run_replica
 from nepher_brain_comm.smoke import smoke
 
 ROOT = Path(__file__).resolve().parents[1]
 ZERO = ROOT / "examples" / "zero_brain"
+
+
+def test_apply_determinism_flags_leaves_fast_kernels(monkeypatch):
+    monkeypatch.setenv("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    apply_determinism_flags()
+    assert "CUBLAS_WORKSPACE_CONFIG" not in os.environ
 
 
 def test_zero_brain_smoke(tmp_path: Path):

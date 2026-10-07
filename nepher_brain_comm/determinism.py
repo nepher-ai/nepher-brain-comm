@@ -14,14 +14,14 @@ import numpy as np
 
 
 def apply_determinism_flags() -> None:
-    """Enable deterministic kernels once, before the model is loaded."""
-    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
-    torch = _torch()
-    if torch is None:
-        return
-    torch.use_deterministic_algorithms(True)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
+    """Leave fast kernels enabled. Call this before the model is loaded.
+
+    ``reseed`` still seeds each ``act`` from the episode seed and the step.
+    Deterministic cuBLAS and cuDNN kernels are left off so attention and
+    ``torch.compile`` can use the fast path. A brain image may still export
+    ``CUBLAS_WORKSPACE_CONFIG``; drop it before torch initializes cuBLAS.
+    """
+    os.environ.pop("CUBLAS_WORKSPACE_CONFIG", None)
 
 
 def reseed(seed: int, step: int) -> None:
